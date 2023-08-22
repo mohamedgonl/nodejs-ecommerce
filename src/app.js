@@ -13,6 +13,9 @@ app.use(compression());
 
 // init db
 
+require('./dbs/init.mongodb')
+const {checkOverload} = require('./helpers/check.conenct')
+checkOverload()
 // init routes
 app.get('/', (req,res,next) => {
     const compresStr = " Hello fodfd bà con"
