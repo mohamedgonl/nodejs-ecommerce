@@ -1,10 +1,10 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const MONGO_URL = `mongodb://localhost:27017/shopDEV`
 const {countConnect} = require('../helpers/check.conenct')
+const {db: {host, name, port}} = require('../configs/config.mongodb')
 
-
+const MONGO_URL = `mongodb://${host}:${port}/${name}`
 class Database {
     constructor(){
         this.connect()
@@ -16,7 +16,7 @@ class Database {
             mongoose.set('debug', true)
             mongoose.set('debug', {color: true})
         }
-        mongoose.connect(MONGO_URL).then( _ => console.log(`Connected Mongodb Success PRO`))
+        mongoose.connect(MONGO_URL).then( _ => console.log(`Connected Mongodb Success PRO:: ${MONGO_URL}`))
         .then(__ => countConnect())
         .catch(err => console.log(`Error Connect`))
 

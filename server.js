@@ -1,5 +1,5 @@
 const app = require("./src/app");
-const PORT = 2000;
+const PORT = process.env.PORT || 2000;
 
 const sever = app.listen(PORT, () => {
   console.log(`WSV: Ecomerce started with port ${PORT}`);
