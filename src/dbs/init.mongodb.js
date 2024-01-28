@@ -2,8 +2,9 @@
 
 const { default: mongoose } = require("mongoose")
 const { countConnect, checkOverload } = require("../helpers/checkConnect")
+const {db: {host, name, port}} = require('../configs/config.mongodb')
 
-const connectString  = `mongodb://localhost:27017/nodejs-ecomerce`
+const connectString  = `mongodb://${host}:${port}/${name}`
 
 
 
@@ -23,7 +24,7 @@ class Database {
             mongoose.connect(connectString, {
                 maxPoolSize: 50
             }).then(()=> {
-                console.log(`Connect Mongodb Success`);
+                console.log(`Connect Mongodb Success ::: ${connectString}`);
                 countConnect()
                 checkOverload()
             }).catch( err => console.log(`Error Connect!`))

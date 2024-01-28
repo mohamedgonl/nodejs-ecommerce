@@ -1,0 +1,4 @@
+Section 4:
+- config env cho các cài đặt với CSDL
+- có thể chia ra config dev và prod  tương ứng với biến môi trường
+- tuy nhiên  trong config dev và prod cũng cần phải lấy  các tham  số theo biến môi trường  để bảo mật
