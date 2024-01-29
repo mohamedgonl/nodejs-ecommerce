@@ -2,7 +2,8 @@
 
 const shopModel = require("../models/shop.model");
 const bcrypt = require("bcrypt");
-const crypto = require('crypto')
+const crypto = require('crypto');
+const KeyTokenService = require("./keyToken.service");
 const RoleShop = {
     SHOP: 'SHOP',
     WRITER: 'WRITER',
@@ -29,9 +30,23 @@ class AccessService {
       });
 
       if(newShop) {
-        const {} = crypto.generateKeyPairSync('rsa',{
+        const {privateKey, publicKey} = crypto.generateKeyPairSync('rsa',{
             modulusLength: 4096
         })
+
+        const  publicKeyString = await KeyTokenService.createKeyToken({
+          userId, publicKey
+        })
+
+        if(!publicKeyString) return {
+          code: 'xxxx',
+          message: 'Error'
+        }
+
+      }
+
+      return {
+        ok: 'ok'
       }
 
     } catch (error) {
