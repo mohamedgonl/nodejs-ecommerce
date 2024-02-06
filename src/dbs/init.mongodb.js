@@ -26,7 +26,7 @@ class Database {
             }).then(()=> {
                 console.log(`Connect Mongodb Success ::: ${connectString}`);
                 countConnect()
-                checkOverload()
+                // checkOverload()
             }).catch( err => console.log(`Error Connect!`))
 
         }
