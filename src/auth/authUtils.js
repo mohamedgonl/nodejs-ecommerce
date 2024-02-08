@@ -16,9 +16,14 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
                 console.error(`error: ` + err);
             }
             else {
+                console.log('Decode ::::: ');
                 console.log(decode);
             }
         })
+
+        return {
+            accessToken, refreshToken
+        }
     } catch (error) {
         
     }
