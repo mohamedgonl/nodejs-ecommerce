@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const KeyTokenService = require("./keyToken.service");
 const { createTokenPair } = require("../auth/authUtils");
 const { getInfoData } = require("../utils");
+const { BadRequestError } = require("../core/successs.response");
 const RoleShop = {
   SHOP: "SHOP",
   WRITER: "WRITER",
@@ -15,13 +16,10 @@ const RoleShop = {
 
 class AccessService {
   static signUp = async ({ name, email, password }) => {
-    try {
+
       const shop = await shopModel.findOne({ email }).lean();
       if (shop) {
-        return {
-          code: "xxxx",
-          message: "Shop already existed",
-        };
+       throw new BadRequestError("Error: Shop already exited!")
       }
       const hashPassword = await bcrypt.hash(password, 10);
       const newShop = await shopModel.create({
@@ -31,7 +29,10 @@ class AccessService {
         roles: [RoleShop.SHOP],
       });
 
-      if (newShop) {
+      if (!newShop) {
+        throw new BadRequestError("Cant create new shop")
+      }
+      else{
         const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
           modulusLength: 4096,
           publicKeyEncoding: {
@@ -50,12 +51,7 @@ class AccessService {
         });
 
         if (!publicKeyString)
-          return {
-            code: "xxxx",
-            message: "Error",
-          };
-
-        const publicKeyObj = crypto.createPublicKey(publicKeyString);
+          throw new BadRequestError("Cant create publickey")
 
         const tokens = await createTokenPair(
           { userId: newShop._id, email },
@@ -63,7 +59,6 @@ class AccessService {
           privateKey
         );
 
-        console.log(`Create token success :::`, tokens);
 
         return {
           code: 201,
@@ -73,17 +68,6 @@ class AccessService {
           },
         };
       }
-
-      return {
-        ok: "ok",
-      };
-    } catch (error) {
-      return {
-        code: "xxx",
-        message: error.message,
-        status: "error",
-      };
-    }
   };
 }
 
