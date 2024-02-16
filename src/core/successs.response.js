@@ -1,24 +1,37 @@
-"use strict"
+"use strict";
+const { ReasonPhrases, StatusCodes } = require("../constants/httpStatusCode");
 
-const { ReasonPhrases, StatusCodes } = require("../constants/httpStatusCode")
-
-class ErrorResponse extends Error {
-    constructor(message, status) {
-        super(message)
-        this.status = status
-    }
+class SuccessResponse {
+  constructor({
+    message,
+    statusCode = StatusCodes.OK,
+    reasonStatusCode = ReasonPhrases.OK,
+    metadata = {},
+  }) {
+    this.message = !message ? reasonStatusCode : message;
+    this.status = statusCode;
+    this.metadata = metadata;
+  }
+  send(res, headers = {}) {
+    return res.status(this.status).json(this);
+  }
 }
 
-class ConflictRequestError extends ErrorResponse{
-    constructor(message = ReasonPhrases.CONFLICT, statusCode = StatusCodes.CONFLICT){
-        super(message, statusCode)
-    }
+class OK extends SuccessResponse {
+  constructor({ message, metadata }) {
+    super({ message, metadata });
+  }
 }
 
-class BadRequestError extends ErrorResponse{
-    constructor(message =ReasonPhrases.BAD_REQUEST, statusCode =StatusCodes.BAD_REQUEST){
-        super(message, statusCode)
-    }
+class CREATED extends SuccessResponse {
+  constructor({
+    message,
+    metadata,
+    statusCode = StatusCodes.CREATED,
+    reasonStatusCode = ReasonPhrases.CREATED,
+  }) {
+    super({ message, metadata, statusCode, reasonStatusCode });
+  }
 }
 
-module.exports= {ConflictRequestError, BadRequestError}
+module.exports = { OK, CREATED };
