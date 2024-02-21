@@ -1,11 +1,9 @@
 "use strict";
 
+const { HEADER } = require("../constants/headers");
 const { findApiKeyById } = require("../services/apikey.service");
 
-const HEADER = {
-  API_KEY: "x-api-key",
-  AUTHORIZATION: "authorization",
-};
+
 const apiKey = async (req, res, next) => {
   try {
     const key = req.headers[HEADER.API_KEY]?.toString();
@@ -49,10 +47,5 @@ const checkPermission = (permission) => {
   };
 };
 
-const asyncHandler = fn => {
-  return (req,res, next) => {
-    fn(req,res,next).catch(next)
-  }
-}
 
-module.exports = { apiKey, checkPermission , asyncHandler};
+module.exports = { apiKey, checkPermission };

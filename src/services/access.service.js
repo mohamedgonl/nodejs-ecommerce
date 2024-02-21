@@ -8,6 +8,7 @@ const { createTokenPair } = require("../auth/authUtils");
 const { getInfoData } = require("../utils");
 const { BadRequestError, AuthFailureError } = require("../core/error.response");
 const { findByEmail } = require("./shop.service");
+const { log } = require("console");
 const RoleShop = {
   SHOP: "SHOP",
   WRITER: "WRITER",
@@ -106,6 +107,11 @@ class AccessService {
       }),
       tokens,
     };
+  };
+
+  static logout = async (keyStore) => {
+    const delKey = await KeyTokenService.removeKeyById(keyStore._id);
+    return delKey;
   };
 }
 
